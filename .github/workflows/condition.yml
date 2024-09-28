@@ -1,0 +1,29 @@
+name: this is for condition
+on:
+ push:
+   branches:
+     - main
+     - stage
+   pull_request:
+     branches: [ "main" ]
+ workflow_dispatch:
+jobs:
+  initail_job:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout repo
+      uses: actions/checkout@v4
+    - name: run a command
+      run: echo "this is the initail job"
+  conditional_job:
+     needs:  initail_job
+     runs-on: ubuntu-latest
+     steps:
+     - name: Execute on a specific condition
+       run: echo "this step runs because of the conditon true"
+       if: github.ref == 'refs/heads/main'
+
+     - name: Alternative step for false condition
+       run: echo "this step would run if the above condition is false"
+       if: github.ref != 'refs/heads/main'
+ 
